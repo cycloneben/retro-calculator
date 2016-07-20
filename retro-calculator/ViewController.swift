@@ -18,13 +18,14 @@ class ViewController: UIViewController {
         case Subtract = "-"
         case Add = "+"
         case Empty = "Empty"
+        case Clear = "Clear"
     }
     
     @IBOutlet weak var outputLbl: UILabel!
     
     var btnSound: AVAudioPlayer!
     
-    var runningNumber = ""
+    var runningNumber = "0"
     var leftValStr = ""
     var rightValStr = ""
     var currentOperation: Operation = Operation.Empty
@@ -76,9 +77,23 @@ class ViewController: UIViewController {
         processOperation(currentOperation)
     }
     
+    @IBAction func onClearPressed(sender: AnyObject) {
+        processOperation(Operation.Clear)
+        
+            }
+
     func processOperation(op: Operation) {
         playSound()
-        
+
+        if op == Operation.Clear{
+                leftValStr = ""
+                rightValStr = ""
+                currentOperation = Operation.Empty
+                result = ""
+                runningNumber = "0"
+                outputLbl.text = "0"
+            return;
+        }
         
         if currentOperation != Operation.Empty {
             
@@ -98,18 +113,16 @@ class ViewController: UIViewController {
                 }
                 leftValStr = result
                 outputLbl.text = result
-                
-            }
-            
-            currentOperation = op
+        }
+                currentOperation = op
         } else {
             //This is the first time an operator has been pressed
             leftValStr = runningNumber
             runningNumber = ""
             currentOperation = op
             
-        }
-        
+      }
+    
     }
     func playSound(){
         if btnSound.playing {
